@@ -1,0 +1,17 @@
+D:\Documents\Programming\Verificable\Proyecto\CalendarApp\bin\Release\netcoreapp3.0\CalendarApp.exe
+D:\Documents\Programming\Verificable\Proyecto\CalendarApp\bin\Release\netcoreapp3.0\CalendarApp.deps.json
+D:\Documents\Programming\Verificable\Proyecto\CalendarApp\bin\Release\netcoreapp3.0\CalendarApp.runtimeconfig.json
+D:\Documents\Programming\Verificable\Proyecto\CalendarApp\bin\Release\netcoreapp3.0\CalendarApp.runtimeconfig.dev.json
+D:\Documents\Programming\Verificable\Proyecto\CalendarApp\bin\Release\netcoreapp3.0\CalendarApp.dll
+D:\Documents\Programming\Verificable\Proyecto\CalendarApp\bin\Release\netcoreapp3.0\CalendarApp.pdb
+D:\Documents\Programming\Verificable\Proyecto\CalendarApp\obj\Release\netcoreapp3.0\CalendarApp.csprojAssemblyReference.cache
+D:\Documents\Programming\Verificable\Proyecto\CalendarApp\obj\Release\netcoreapp3.0\MainWindow.g.cs
+D:\Documents\Programming\Verificable\Proyecto\CalendarApp\obj\Release\netcoreapp3.0\App.g.cs
+D:\Documents\Programming\Verificable\Proyecto\CalendarApp\obj\Release\netcoreapp3.0\CalendarApp_MarkupCompile.cache
+D:\Documents\Programming\Verificable\Proyecto\CalendarApp\obj\Release\netcoreapp3.0\CalendarApp_MarkupCompile.lref
+D:\Documents\Programming\Verificable\Proyecto\CalendarApp\obj\Release\netcoreapp3.0\MainWindow.baml
+D:\Documents\Programming\Verificable\Proyecto\CalendarApp\obj\Release\netcoreapp3.0\CalendarApp.g.resources
+D:\Documents\Programming\Verificable\Proyecto\CalendarApp\obj\Release\netcoreapp3.0\CalendarApp.AssemblyInfoInputs.cache
+D:\Documents\Programming\Verificable\Proyecto\CalendarApp\obj\Release\netcoreapp3.0\CalendarApp.AssemblyInfo.cs
+D:\Documents\Programming\Verificable\Proyecto\CalendarApp\obj\Release\netcoreapp3.0\CalendarApp.dll
+D:\Documents\Programming\Verificable\Proyecto\CalendarApp\obj\Release\netcoreapp3.0\CalendarApp.pdb
