@@ -75,7 +75,6 @@ namespace CalendarApp
             for (int i = loopStart; i < weekLength+1; i++)
             {
                 int dayOfPosition = dayTracker.Day;
-                System.Diagnostics.Debug.WriteLine(dayOfPosition);
                 int rowPosition = 0;
                 TextBlock dayNumber = new TextBlock();
                 dayNumber.Text = dayOfPosition.ToString();

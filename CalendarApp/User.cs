@@ -18,34 +18,35 @@ namespace CalendarApp
         public User(string username)
         {
             this.username = username;
-
-            try
-            {
-                string jsonStringToAdd = File.ReadAllText("Users");
-                var list = JsonConvert.DeserializeObject<List<User>>(jsonStringToAdd);
-                list.Add(this);
-                var convertedJson = JsonConvert.SerializeObject(list, Newtonsoft.Json.Formatting.Indented);
-                File.WriteAllText("Users", convertedJson);
-            }
-            catch (IOException e)
-            {
-                Debug.Write(e);
-                List<User> list = new List<User> { this };
-                var convertedJson = JsonConvert.SerializeObject(list, Newtonsoft.Json.Formatting.Indented);
-                File.WriteAllText("Users", convertedJson);
-            }
         }
 
-        public void SignIn(string username)
+        public void Save()
         {
+            string jsonStringToAdd = null;
             try
             {
-                string jsonStringToAdd = File.ReadAllText("Users");
-                var list = JsonConvert.DeserializeObject<List<User>>(jsonStringToAdd);
+                jsonStringToAdd = File.ReadAllText("Users.json");
             }
-            catch (IOException e)
+            catch (Exception e)
             {
                 Debug.Write(e);
+            }
+
+            if (jsonStringToAdd != null)
+            {
+                var list = JsonConvert.DeserializeObject<List<string>>(jsonStringToAdd);
+                if (!list.Contains(this.username))
+                {
+                    list.Add(this.username);
+                    var convertedJson = JsonConvert.SerializeObject(list, Newtonsoft.Json.Formatting.Indented);
+                    File.WriteAllText("Users.json", convertedJson);
+                }
+            }
+            else
+            {
+                List<string> list = new List<string> { this.username };
+                var convertedJson = JsonConvert.SerializeObject(list, Newtonsoft.Json.Formatting.Indented);
+                File.WriteAllText("Users.json", convertedJson);
             }
         }
     }

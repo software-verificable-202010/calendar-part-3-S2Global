@@ -23,11 +23,22 @@ namespace CalendarApp
     {
         public static DateTime CalendarDate;
 
+        public static User sessionUser;
+
         public MainWindow()
         {
             System.Globalization.Calendar calendar = CultureInfo.InvariantCulture.Calendar;
             InitializeComponent();
             CalendarDate = DateTime.Now;
+            UpdateCalendar();
+        }
+
+        public MainWindow(User user)
+        {
+            System.Globalization.Calendar calendar = CultureInfo.InvariantCulture.Calendar;
+            InitializeComponent();
+            CalendarDate = DateTime.Now;
+            sessionUser = user;
             UpdateCalendar();
         }
 
@@ -66,6 +77,24 @@ namespace CalendarApp
             var weekView = new WeekWindow();
             weekView.Show();
             this.Close();
+        }
+
+        private void GoToAppointment()
+        {
+            /*var AppointmentView = new AppointmentWindow();
+            AppointmentView.Show();*/
+        }
+
+        private void GoToAppointmentForm()
+        {
+            var AppointmentFormView = new AppointmentForm();
+            AppointmentFormView.Show();
+        }
+
+        private void GoToSignIn()
+        {
+            var SignInView = new SignInWindow();
+            SignInView.Show();
         }
 
         private void UpdateRectangle()

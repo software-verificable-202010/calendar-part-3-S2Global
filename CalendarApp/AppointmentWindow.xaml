@@ -5,8 +5,25 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CalendarApp"
         mc:Ignorable="d"
-        Title="AppointmentWindow" Height="450" Width="800">
-    <Grid>
-        
+        Title="Appointment" Height="300" Width="300">
+    <Grid Margin="10" x:Name="AppointmentView">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="2*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <TextBlock Grid.Row="0">Title: </TextBlock>
+        <TextBlock Grid.Row="1">Creator: </TextBlock>
+        <TextBlock Grid.Row="2">Start Date: </TextBlock>
+        <TextBlock Grid.Row="3">End Date: </TextBlock>
+        <TextBlock Grid.Row="4">Participants: </TextBlock>
+        <TextBlock Grid.Row="5">Description: </TextBlock>
     </Grid>
 </Window>
