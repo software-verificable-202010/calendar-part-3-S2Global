@@ -88,7 +88,7 @@ namespace CalendarApp
         }
 
         [TestCase]
-        public void Update(User user, string title, string description, DateTime startDate, DateTime endDate, List<string> participants)
+        public void Update(User user, string description, DateTime startDate, DateTime endDate, List<string> participants)
         {
             if(user.username == creator.username)
             {
@@ -105,6 +105,7 @@ namespace CalendarApp
                 {
                     List<Appointment> appointmentList = JsonConvert.DeserializeObject<List<Appointment>>(jsonStringToRemove);
                     Appointment appointmentToRemove = appointmentList.Find(appointment => appointment.title == this.title);
+                    appointmentList.Remove(appointmentToRemove);
                     var convertedJson = JsonConvert.SerializeObject(appointmentList, Newtonsoft.Json.Formatting.Indented);
                     File.WriteAllText("Appointments.json", convertedJson);
                 }
@@ -171,6 +172,7 @@ namespace CalendarApp
                 {
                     List<Appointment> appointmentList = JsonConvert.DeserializeObject<List<Appointment>>(jsonStringToRemove);
                     Appointment appointmentToRemove = appointmentList.Find(appointment => appointment.title == this.title);
+                    appointmentList.Remove(appointmentToRemove);
                     var convertedJson = JsonConvert.SerializeObject(appointmentList, Newtonsoft.Json.Formatting.Indented);
                     File.WriteAllText("Appointments.json", convertedJson);
                 }

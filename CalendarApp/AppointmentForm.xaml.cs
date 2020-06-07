@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -24,6 +25,8 @@ namespace CalendarApp
             if (isUpdate)
             {
                 titleBox.Text = appointment.title;
+                titleBox.IsReadOnly = true;
+                titleBox.ToolTip = "Cannot change title.";
                 descriptionBox.Text = appointment.description;
                 startDateBox.Value = appointment.startDate;
                 endDateBox.Value = appointment.endDate;
@@ -66,8 +69,8 @@ namespace CalendarApp
             if (titleBox.Text.Length > 0 && descriptionBox.Text.Length > 0 && startDateBox.Value.HasValue && endDateBox.Value.HasValue && participantBox.Text.Length > 0)
             {
                 List<string> participants = participantBox.Text.Split().ToList();
-                Appointment appointment = MainWindow.sessionUserAppointments.Find(appointment => appointment.title.Equals(titleBox.Text));
-                appointment.Update(MainWindow.sessionUser, titleBox.Text, descriptionBox.Text, (DateTime)startDateBox.Value, (DateTime)endDateBox.Value, participants);
+                Appointment appointment = MainWindow.sessionUserAppointments.Find(appointment => appointment.title == titleBox.Text);
+                appointment.Update(MainWindow.sessionUser, descriptionBox.Text, (DateTime)startDateBox.Value, (DateTime)endDateBox.Value, participants);
                 appointment.SaveUpdatedAppointment();
                 this.Close();
             }

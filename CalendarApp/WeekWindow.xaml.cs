@@ -117,7 +117,6 @@ namespace CalendarApp
                 List<Appointment> dayAppointments = MainWindow.sessionUserAppointments.FindAll(appointment => (appointment.startDate.Date == dayTracker.Date));
                 if (dayAppointments.Count > 0)
                 {
-                    Debug.WriteLine(dayAppointments[0].title);
                     foreach (Appointment appointment in dayAppointments)
                     {
                         CreateButton(appointment, i);

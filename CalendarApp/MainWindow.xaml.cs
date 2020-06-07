@@ -102,7 +102,6 @@ namespace CalendarApp
         {
             var button = sender as Button;
             List<Appointment> appointments = (List<Appointment>)button.Tag;
-            Debug.WriteLine(appointments[0].title);
             foreach (Appointment appointment in appointments)
             {
                 var AppointmentView = new AppointmentWindow(appointment);
@@ -142,7 +141,6 @@ namespace CalendarApp
             DateTime firstDayOfMonth = new DateTime(year, month, firstDay);
             int daysInMonth = DateTime.DaysInMonth(year, month);
             int firstDayOfWeek = (int)firstDayOfMonth.DayOfWeek;
-            Debug.WriteLine(firstDayOfWeek);
             if (firstDayOfWeek == 0)
             {
                 firstDayOfWeek = sunday;
