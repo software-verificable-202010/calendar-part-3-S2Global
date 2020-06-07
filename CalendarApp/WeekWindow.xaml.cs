@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -22,7 +23,6 @@ namespace CalendarApp
     public partial class WeekWindow : Window
     {
         private int weekLength = 7;
-        private Appointment[] appointments;
 
         public WeekWindow()
         {
@@ -38,41 +38,54 @@ namespace CalendarApp
             UpdateTitle();
             UpdateDayNumbers();
             UpdateTimes();
+            UpdateDayAppointments();
         }
 
         private void NextWeekClick(object sender, RoutedEventArgs e)
         {
-            MainWindow.CalendarDate = MainWindow.CalendarDate.AddDays(weekLength);
+            MainWindow.calendarDate = MainWindow.calendarDate.AddDays(weekLength);
             UpdateWeekView();
         }
 
         private void PreviousWeekClick(object sender, RoutedEventArgs e)
         {
-            MainWindow.CalendarDate = MainWindow.CalendarDate.AddDays(-weekLength);
+            MainWindow.calendarDate = MainWindow.calendarDate.AddDays(-weekLength);
             UpdateWeekView();
         }
 
         private void GoToCalendar(object sender, RoutedEventArgs e)
         {
-            var calendarView = new MainWindow(MainWindow.CalendarDate);
+            var calendarView = new MainWindow(MainWindow.calendarDate);
             calendarView.Show();
             this.Close();
+        }
+
+        public void GoToAppointmentView(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            Appointment appointment = (Appointment)button.Tag;
+            var AppointmentView = new AppointmentWindow(appointment);
+            AppointmentView.Show();
+        }
+
+        private void GoToAppointmentForm(object sender, RoutedEventArgs e)
+        {
+            var AppointmentFormView = new AppointmentForm(false, null);
+            AppointmentFormView.Show();
         }
 
         private void UpdateDayNumbers()
         {
             int sunday = 7;
             int dayOffset = 1;
-            DateTime dayTracker = MainWindow.CalendarDate;
+            DateTime dayTracker = MainWindow.calendarDate;
             int dayOfWeek = (int)dayTracker.DayOfWeek;
             dayTracker = dayTracker.AddDays(-dayOfWeek + dayOffset);
-            System.Diagnostics.Debug.WriteLine(dayOfWeek);
             if (dayOfWeek == 0)
             {
                 dayOfWeek = sunday;
             }
-            int loopStart = 1;
-            for (int i = loopStart; i < weekLength+1; i++)
+            for (int i = 1; i < weekLength + dayOffset; i++)
             {
                 int dayOfPosition = dayTracker.Day;
                 int rowPosition = 0;
@@ -86,6 +99,59 @@ namespace CalendarApp
                 DayNumbers.Children.Add(dayNumber);
                 dayTracker = dayTracker.AddDays(1); 
             }
+        }
+
+        private void UpdateDayAppointments()
+        {
+            int sunday = 7;
+            int dayOffset = 1;
+            DateTime dayTracker = MainWindow.calendarDate;
+            int dayOfWeek = (int)dayTracker.DayOfWeek;
+            dayTracker = dayTracker.AddDays(-dayOfWeek + dayOffset);
+            if (dayOfWeek == 0)
+            {
+                dayOfWeek = sunday;
+            }
+            for (int i = 0; i < weekLength; i++)
+            {
+                List<Appointment> dayAppointments = MainWindow.sessionUserAppointments.FindAll(appointment => (appointment.startDate.Date == dayTracker.Date));
+                if (dayAppointments.Count > 0)
+                {
+                    Debug.WriteLine(dayAppointments[0].title);
+                    foreach (Appointment appointment in dayAppointments)
+                    {
+                        CreateButton(appointment, i);
+                    }
+                }
+                dayTracker = dayTracker.AddDays(dayOffset);
+            }
+        }
+
+        private void CreateButton(Appointment appointment, int i)
+        {
+            int dayOffset = 1;
+            Button appointmentButtton = new Button();
+            appointmentButtton.Content = appointment.title;
+            appointmentButtton.ToolTip = "Click to open.";
+            appointmentButtton.Background = Brushes.Salmon;
+            appointmentButtton.BorderThickness = new Thickness(0, 0, 0, 0);
+            appointmentButtton.FontSize = 16;
+            appointmentButtton.SetValue(Grid.ColumnProperty, i + dayOffset);
+            appointmentButtton.SetValue(Grid.RowProperty, appointment.startDate.Hour);
+            if (appointment.endDate.Date != appointment.startDate.Date)
+            {
+                int fullDay = 24;
+                appointmentButtton.SetValue(Grid.RowSpanProperty, fullDay);
+            }
+            else
+            {
+                appointmentButtton.SetValue(Grid.RowSpanProperty, appointment.endDate.Hour - appointment.startDate.Hour + dayOffset);
+            }
+            appointmentButtton.Click += new RoutedEventHandler(GoToAppointmentView);
+            appointmentButtton.Tag = appointment;
+            appointmentButtton.SetValue(Grid.VerticalAlignmentProperty, VerticalAlignment.Stretch);
+            appointmentButtton.SetValue(Grid.HorizontalAlignmentProperty, HorizontalAlignment.Stretch);
+            WeekView.Children.Add(appointmentButtton);
         }
 
         private void UpdateTimes()
@@ -108,32 +174,8 @@ namespace CalendarApp
 
         private void UpdateTitle()
         {
-            string title = MainWindow.CalendarDate.ToString("MMMM") + " " + MainWindow.CalendarDate.Year;
+            string title = MainWindow.calendarDate.ToString("MMMM") + " " + MainWindow.calendarDate.Year;
             Title.Text = title;
-        }
-
-        private void UpdateApointments()
-        {
-            
-            foreach (Appointment appointment in appointments)
-            {
-                if(appointment.startDate >= MainWindow.CalendarDate  && appointment.endDate < MainWindow.CalendarDate.AddDays(weekLength))
-                {
-                    int weekendRowProperty = 0;
-                    int weekendColumnProperty = 5;
-                    int weekendRowSpanProperty = 6;
-                    int weekendColumnSpanProperty = 2;
-                    Rectangle weekendHighlight = new Rectangle();
-                    weekendHighlight.SetValue(Grid.RowProperty, weekendRowProperty);
-                    weekendHighlight.SetValue(Grid.ColumnProperty, weekendColumnProperty);
-                    weekendHighlight.SetValue(Grid.RowSpanProperty, weekendRowSpanProperty);
-                    weekendHighlight.SetValue(Grid.ColumnSpanProperty, weekendColumnSpanProperty);
-                    SolidColorBrush rectangleColourFill = new SolidColorBrush();
-                    rectangleColourFill.Color = Color.FromArgb(100, 127, 255, 212);
-                    weekendHighlight.SetValue(Shape.FillProperty, rectangleColourFill);
-                    WeekView.Children.Add(weekendHighlight);
-                }
-            }
         }
     }
 }

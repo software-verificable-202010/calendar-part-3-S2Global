@@ -110,8 +110,9 @@
                 </Grid>
             </Grid>
         </ScrollViewer>
-        <Button Content=">" HorizontalAlignment="Left" Margin="736,0,0,0" VerticalAlignment="Center" Height="30" Width="30" x:Name="nextWeek" Click="NextWeekClick"/>
-        <Button Content="&lt;" HorizontalAlignment="Left" Margin="700,0,0,0" VerticalAlignment="Center" Height="30" Width="30" x:Name="previousWeek" Click="PreviousWeekClick"/>
-        <Button Content="Back" HorizontalAlignment="Left" Margin="600,0,0,0" VerticalAlignment="Center" Height="30" Width="60" x:Name="goToCalendar" Click="GoToCalendar"/>
+        <Button Content=">" HorizontalAlignment="Left" Margin="736,0,0,0" VerticalAlignment="Center" Height="30" Width="30" x:Name="nextWeek" Click="NextWeekClick" ToolTip="Next Week" />
+        <Button Content="&lt;" HorizontalAlignment="Left" Margin="700,0,0,0" VerticalAlignment="Center" Height="30" Width="30" x:Name="previousWeek" Click="PreviousWeekClick" ToolTip="Previous Week" />
+        <Button Content="Back" HorizontalAlignment="Left" Margin="600,0,0,0" VerticalAlignment="Center" Height="30" Width="60" x:Name="goToCalendar" Click="GoToCalendar" ToolTip="Back to Calendar" />
+        <Button Content="+" HorizontalAlignment="Left" Margin="526,0,0,0" VerticalAlignment="Center" Height="30" Width="30" x:Name="goToAppointmentForm" Click="GoToAppointmentForm" ToolTip="New Appointment" />
     </Grid>
 </Window>

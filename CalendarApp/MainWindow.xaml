@@ -58,8 +58,9 @@
                 <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
         </Grid>
-        <Button Content="Week" HorizontalAlignment="Left" Margin="600,0,0,0" VerticalAlignment="Center" Height="30" Width="60" x:Name="goToWeek" Click="GoToWeek"/>
-        <Button Content=">" HorizontalAlignment="Left" Margin="736,0,0,0" VerticalAlignment="Center" Height="30" Width="30" x:Name="nextMonth" Click="NextClick"/>
-        <Button Content="&lt;" HorizontalAlignment="Left" Margin="700,0,0,0" VerticalAlignment="Center" Height="30" Width="30" x:Name="previousMonth" Click="PreviousClick"/>
+        <Button Content="Week" HorizontalAlignment="Left" Margin="600,0,0,0" VerticalAlignment="Center" Height="30" Width="60" x:Name="goToWeek" Click="GoToWeek" ToolTip="View Week" />
+        <Button Content=">" HorizontalAlignment="Left" Margin="736,0,0,0" VerticalAlignment="Center" Height="30" Width="30" x:Name="nextMonth" Click="NextClick" ToolTip="Next Month" />
+        <Button Content="&lt;" HorizontalAlignment="Left" Margin="700,0,0,0" VerticalAlignment="Center" Height="30" Width="30" x:Name="previousMonth" Click="PreviousClick" ToolTip="Previous Month" />
+        <Button Content="+" HorizontalAlignment="Left" Margin="526,0,0,0" VerticalAlignment="Center" Height="30" Width="30" x:Name="goToAppointmentForm" Click="GoToAppointmentForm" ToolTip="New Appointment" />
     </Grid>
 </Window>

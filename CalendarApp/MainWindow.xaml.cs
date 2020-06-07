@@ -1,6 +1,9 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,23 +24,17 @@ namespace CalendarApp
     /// </summary>
     public partial class MainWindow : Window
     {
-        public static DateTime CalendarDate;
+        public static DateTime calendarDate;
 
         public static User sessionUser;
 
-        public MainWindow()
-        {
-            System.Globalization.Calendar calendar = CultureInfo.InvariantCulture.Calendar;
-            InitializeComponent();
-            CalendarDate = DateTime.Now;
-            UpdateCalendar();
-        }
+        public static List<Appointment> sessionUserAppointments;
 
         public MainWindow(User user)
         {
             System.Globalization.Calendar calendar = CultureInfo.InvariantCulture.Calendar;
             InitializeComponent();
-            CalendarDate = DateTime.Now;
+            calendarDate = DateTime.Now;
             sessionUser = user;
             UpdateCalendar();
         }
@@ -46,7 +43,7 @@ namespace CalendarApp
         {
             System.Globalization.Calendar calendar = CultureInfo.InvariantCulture.Calendar;
             InitializeComponent();
-            CalendarDate = incomingDate;
+            calendarDate = incomingDate;
             UpdateCalendar();
         }
 
@@ -54,21 +51,43 @@ namespace CalendarApp
         {
             MonthView.Children.Clear();
             UpdateTitle();
-            UpdateRectangle();
+            UpdateWeekendRectangle();
+            GetAppointments();
             UpdateDayNumbers();
+            UpdateDayButtons();
+        }
+
+        public void GetAppointments()
+        {
+
+            string jsonAppointments = null;
+            try
+            {
+                jsonAppointments = File.ReadAllText("Appointments.json");
+            }
+            catch (Exception e)
+            {
+                Debug.Write(e);
+            }
+
+            if (jsonAppointments != null)
+            {
+                List<Appointment> allAppointments = JsonConvert.DeserializeObject<List<Appointment>>(jsonAppointments);
+                sessionUserAppointments = allAppointments.Where(x => x.participants.Contains(sessionUser.username)).ToList();
+            }
         }
 
         private void NextClick(object sender, RoutedEventArgs e)
         {
             int nextMonth = 1;
-            CalendarDate = CalendarDate.AddMonths(nextMonth);
+            calendarDate = calendarDate.AddMonths(nextMonth);
             UpdateCalendar();
         }
 
         private void PreviousClick(object sender, RoutedEventArgs e)
         {
             int previousMonth = -1;
-            CalendarDate = CalendarDate.AddMonths(previousMonth);
+            calendarDate = calendarDate.AddMonths(previousMonth);
             UpdateCalendar();
         }
 
@@ -79,25 +98,25 @@ namespace CalendarApp
             this.Close();
         }
 
-        private void GoToAppointment()
+        public void GoToAppointmentsView(object sender, RoutedEventArgs e)
         {
-            /*var AppointmentView = new AppointmentWindow();
-            AppointmentView.Show();*/
+            var button = sender as Button;
+            List<Appointment> appointments = (List<Appointment>)button.Tag;
+            Debug.WriteLine(appointments[0].title);
+            foreach (Appointment appointment in appointments)
+            {
+                var AppointmentView = new AppointmentWindow(appointment);
+                AppointmentView.Show();
+            }
         }
 
-        private void GoToAppointmentForm()
+        private void GoToAppointmentForm(object sender, RoutedEventArgs e)
         {
-            var AppointmentFormView = new AppointmentForm();
+            var AppointmentFormView = new AppointmentForm(false, null);
             AppointmentFormView.Show();
         }
 
-        private void GoToSignIn()
-        {
-            var SignInView = new SignInWindow();
-            SignInView.Show();
-        }
-
-        private void UpdateRectangle()
+        private void UpdateWeekendRectangle()
         {
             int weekendRowProperty = 0;
             int weekendColumnProperty = 5;
@@ -117,13 +136,13 @@ namespace CalendarApp
         private void UpdateDayNumbers()
         {
             int sunday = 7;
-            int year = CalendarDate.Year;
-            int month = CalendarDate.Month;
+            int year = calendarDate.Year;
+            int month = calendarDate.Month;
             int firstDay = 1;
             DateTime firstDayOfMonth = new DateTime(year, month, firstDay);
             int daysInMonth = DateTime.DaysInMonth(year, month);
             int firstDayOfWeek = (int)firstDayOfMonth.DayOfWeek;
-            System.Diagnostics.Debug.WriteLine(firstDayOfWeek);
+            Debug.WriteLine(firstDayOfWeek);
             if (firstDayOfWeek == 0)
             {
                 firstDayOfWeek = sunday;
@@ -152,9 +171,59 @@ namespace CalendarApp
             }
         }
 
+        private void UpdateDayButtons()
+        {
+            int sunday = 7;
+            int year = calendarDate.Year;
+            int month = calendarDate.Month;
+            int firstDay = 1;
+            DateTime firstDayOfMonth = new DateTime(year, month, firstDay);
+            int daysInMonth = DateTime.DaysInMonth(year, month);
+            int firstDayOfWeek = (int)firstDayOfMonth.DayOfWeek;
+            if (firstDayOfWeek == 0)
+            {
+                firstDayOfWeek = sunday;
+            }
+            sunday--;
+            int day = 1;
+            int week = 0;
+            int weekDay = firstDayOfWeek - day;
+            for (int i = firstDayOfWeek; i < daysInMonth + firstDayOfWeek; i++)
+            {
+                DateTime currentDate = firstDayOfMonth.AddDays(day - firstDay);
+                Button dayButton = new Button();
+                int buttonSize = 30;
+                List<Appointment> dayAppointments = sessionUserAppointments.FindAll(appointment => (appointment.startDate.Date == currentDate.Date));
+                if (dayAppointments.Count > 0)
+                {
+                    dayButton.ToolTip = "Click to open all appointments for the day.";
+                    dayButton.Background = Brushes.Salmon;
+                    dayButton.BorderThickness = new Thickness(0,0,0,0);
+                    dayButton.Content = dayAppointments.Count;
+                    dayButton.Tag = dayAppointments;
+                    dayButton.SetValue(Grid.RowProperty, week);
+                    dayButton.SetValue(Grid.ColumnProperty, weekDay);
+                    dayButton.Height = buttonSize;
+                    dayButton.Width = buttonSize;
+                    dayButton.Click += new RoutedEventHandler(GoToAppointmentsView);
+                    MonthView.Children.Add(dayButton);
+                }
+                if (weekDay == sunday)
+                {
+                    week++;
+                    weekDay = 0;
+                }
+                else
+                {
+                    weekDay++;
+                }
+                day++;
+            }
+        }
+
         private void UpdateTitle()
         {
-            string title = CalendarDate.ToString("MMMM") + " " + CalendarDate.Year;
+            string title = calendarDate.ToString("MMMM") + " " + calendarDate.Year;
             Title.Text = title;
         }
     }

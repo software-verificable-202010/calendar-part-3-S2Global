@@ -39,9 +39,9 @@ namespace CalendarApp
             creator.Text = appointment.creator.username;
             startDate.Text = appointment.startDate.ToString();
             endDate.Text = appointment.endDate.ToString();
-            foreach (User participant in appointment.participants)
+            foreach (string participant in appointment.participants)
             {
-                participantString += participant.username + " ";
+                participantString += participant + " ";
             }
             participants.Text = participantString;
             description.Text = appointment.description;
@@ -82,6 +82,16 @@ namespace CalendarApp
             AppointmentView.Children.Add(endDate);
             AppointmentView.Children.Add(participants);
             AppointmentView.Children.Add(description);
+
+            editButton.Tag = appointment;
+        }
+
+        public void GoToAppointmentForm(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            Appointment appointment = (Appointment)button.Tag;
+            var AppointmentFormView = new AppointmentForm(true, appointment);
+            AppointmentFormView.Show();
         }
     }
 }

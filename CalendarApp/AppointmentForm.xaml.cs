@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -17,16 +18,75 @@ namespace CalendarApp
     /// </summary>
     public partial class AppointmentForm : Window
     {
-        public AppointmentForm()
+        public AppointmentForm(bool isUpdate, Appointment appointment)
         {
             InitializeComponent();
+            if (isUpdate)
+            {
+                titleBox.Text = appointment.title;
+                descriptionBox.Text = appointment.description;
+                startDateBox.Value = appointment.startDate;
+                endDateBox.Value = appointment.endDate;
+                participantBox.Text = string.Join(" ", appointment.participants);
+                submitButton.Tag = appointment;
+                submitButton.Click += new RoutedEventHandler(UpdateAppointment);
+                deleteButton.Tag = appointment;
+                deleteButton.Click += new RoutedEventHandler(DeleteAppointment);
+            }
+            else
+            {
+                submitButton.Tag = null;
+                submitButton.Click += new RoutedEventHandler(CreateAppointment);
+            }
         }
 
         public void CreateAppointment(object sender, RoutedEventArgs e)
         {
-            Appointment appointment = new Appointment(titleBox.Text, descriptionBox.Text, (DateTime)startDateBox.Value, (DateTime)endDateBox.Value, MainWindow.sessionUser);
-            appointment.Save();
-            this.Close();
+            if(titleBox.Text.Length > 0 && descriptionBox.Text.Length > 0 && startDateBox.Value.HasValue && endDateBox.Value.HasValue && participantBox.Text.Length > 0)
+            {
+                List<string> participants = participantBox.Text.Split().ToList();
+                Appointment appointment = new Appointment(titleBox.Text, descriptionBox.Text, (DateTime)startDateBox.Value, (DateTime)endDateBox.Value, MainWindow.sessionUser, participants);
+                if (appointment.SaveNewAppointment())
+                {
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show("Appointment overlap!", "Overlap Error");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Data Missing!", "Data Error");
+            }
+        }
+
+        public void UpdateAppointment(object sender, RoutedEventArgs e)
+        {
+            if (titleBox.Text.Length > 0 && descriptionBox.Text.Length > 0 && startDateBox.Value.HasValue && endDateBox.Value.HasValue && participantBox.Text.Length > 0)
+            {
+                List<string> participants = participantBox.Text.Split().ToList();
+                Appointment appointment = MainWindow.sessionUserAppointments.Find(appointment => appointment.title.Equals(titleBox.Text));
+                appointment.Update(MainWindow.sessionUser, titleBox.Text, descriptionBox.Text, (DateTime)startDateBox.Value, (DateTime)endDateBox.Value, participants);
+                appointment.SaveUpdatedAppointment();
+                this.Close();
+            }
+            else
+            {
+                MessageBox.Show("Data Missing!", "Data Error");
+            }
+        }
+
+        public void DeleteAppointment(object sender, RoutedEventArgs e)
+        {
+            MessageBoxResult messageBoxResult = MessageBox.Show("Are You Sure?", "Delete Appointment", MessageBoxButton.YesNo);
+            if (messageBoxResult == MessageBoxResult.Yes)
+            {
+                var button = sender as Button;
+                Appointment appointment = (Appointment)button.Tag;
+                appointment.Delete();
+                this.Close();
+            }
         }
     }
 }

@@ -19,17 +19,17 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Label>Title:</Label>
+        <Label Margin="5,5,5,5" >Title:</Label>
         <TextBox Grid.Column="1" Margin="0,5,0,5" x:Name="titleBox"/>
-        <Label Grid.Row="1">Start Date:</Label>
+        <Label Margin="5,5,5,5" Grid.Row="1">Start Date:</Label>
         <xctk:DateTimePicker Grid.Row="1" Grid.Column="1" Margin="0,5,0,5" x:Name="startDateBox"/>
-        <Label Grid.Row="2">End Date:</Label>
+        <Label Margin="5,5,5,5" Grid.Row="2">End Date:</Label>
         <xctk:DateTimePicker Grid.Row="2" Grid.Column="1" Margin="0,5,0,5" x:Name="endDateBox"/>
-        <Label Grid.Row="3">Participants:</Label>
-        <ComboBox Grid.Row="3" Grid.Column="1" Height="25" VerticalAlignment="Top" x:Name="participantListDrop"/>
-        <TextBlock Grid.Row="3" Grid.Column="1" Margin="0,25,0,0" x:Name="participantBlock"/>
-        <Label Grid.Row="4">Description:</Label>
-        <TextBox Grid.Row="4" Grid.Column="1" x:Name="descriptionBox" />
-        <Button Content="Submit" Grid.Row="5" Grid.Column="1" HorizontalAlignment="Right" Margin="0,10,0,0" Click="CreateAppointment" />
+        <Label Margin="5,5,5,5" Grid.Row="3">Participants:</Label>
+        <TextBox Grid.Row="3" Grid.Column="1" Margin="0,5,0,5" x:Name="participantBox" ToolTip="Separate each username with a space." />
+        <Label Margin="5,5,5,5" Grid.Row="4">Description:</Label>
+        <TextBox Grid.Row="4" Grid.Column="1" Margin="0,5,0,5" x:Name="descriptionBox" />
+        <Button Content="Submit" Grid.Row="5" Grid.Column="1" HorizontalAlignment="Right" Margin="0,10,0,0" x:Name="submitButton" />
+        <Button Content="Delete" Grid.Row="5" Grid.Column="0" HorizontalAlignment="Left" Margin="0,10,0,0" Background="PaleVioletRed" x:Name="deleteButton" />
     </Grid>
 </Window>
