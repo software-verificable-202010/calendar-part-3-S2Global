@@ -26,6 +26,7 @@ namespace CalendarApp
             {
                 titleBox.Text = appointment.title;
                 titleBox.IsReadOnly = true;
+                titleBox.IsEnabled = false;
                 titleBox.ToolTip = "Cannot change title.";
                 descriptionBox.Text = appointment.description;
                 startDateBox.Value = appointment.startDate;
@@ -40,6 +41,7 @@ namespace CalendarApp
             {
                 submitButton.Tag = null;
                 submitButton.Click += new RoutedEventHandler(CreateAppointment);
+                deleteButton.IsEnabled = false;
             }
         }
 

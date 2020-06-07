@@ -47,6 +47,13 @@ namespace CalendarApp
             UpdateCalendar();
         }
 
+        public void ReloadWindow(object sender, RoutedEventArgs e)
+        {
+            MainWindow mainWindow = new MainWindow(sessionUser);
+            mainWindow.Show();
+            this.Close();
+        }
+
         public void UpdateCalendar()
         {
             MonthView.Children.Clear();

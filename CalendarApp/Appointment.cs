@@ -72,6 +72,10 @@ namespace CalendarApp
 
         public bool HasOverlap(List<Appointment> appointmentList)
         {
+            if(this.startDate > this.endDate)
+            {
+                return true;
+            }
             if(appointmentList.Find(appointment => appointment.title == this.title) != null)
             {
                 return true;
